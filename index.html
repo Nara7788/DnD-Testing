@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="columns">
+        <div class="column" draggable="true">
+            <header>A</header>
+        </div>
+        <div class="column" draggable="true">
+            <header>B</header>
+        </div>
+        <div class="column" draggable="true">
+            <header>C</header>
+        </div>
+        <div class="overable"></div>
+    </div>
+
+    <script>
+        function handleDragStart(e) {
+            console.log('dragstart');
+            console.log(e.dataTransfer);
+            this.classList.add('dragging');
+            window.dragSrcEl = this;
+
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDrag(e) {
+        }
+
+        function handleDragEnter(e) {
+            console.log('dragenter');
+            this.classList.add('over');
+        }
+
+        function handleDragLeave(e) {
+            console.log('dragleave');
+            this.classList.remove('over');
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault(); // Necessary. Allows us to drop.
+            }
+
+            return false;
+        }
+
+        function handleDrop(e) {
+            console.log('drop');
+            console.log(e);
+            if (e.stopPropagation) {
+                e.stopPropagation(); // stops the browser from redirecting.
+            }
+
+            // Don't do anything if dropping the same column we're dragging.
+            if (dragSrcEl != this) {
+                // Set the source column's HTML to the HTML of the column we dropped on.
+                dragSrcEl.innerHTML = this.innerHTML;
+                this.innerHTML = e.dataTransfer.getData('text/html');
+            }
+
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            console.log('dragend');
+            [].forEach.call(cols, function (col) {
+                col.classList.remove('over');
+                col.classList.remove('dragging');
+            });
+        }
+
+        var cols = document.querySelectorAll('#columns .column');
+        [].forEach.call(cols, function (col) {
+            col.addEventListener('dragstart', handleDragStart, false);
+            col.addEventListener('drag', handleDrag, false);
+            col.addEventListener('dragenter', handleDragEnter, false);
+            col.addEventListener('dragleave', handleDragLeave, false);
+            col.addEventListener('dragover', handleDragOver, false);
+            col.addEventListener('drop', handleDrop, false);
+            col.addEventListener('dragend', handleDragEnd, false);
+        });
+    </script>
+</body>
+
+</html>
