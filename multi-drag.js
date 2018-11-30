@@ -268,7 +268,7 @@
         document.addEventListener('dragleave', function (e) {
             //get a drop target reference from the relatedTarget
             var droptarget = getContainer(related);
-
+            debugger;
             // //if the target is the owner then it's not a valid drop target
             // if (droptarget == selections.owner) {
             //     droptarget = null;
@@ -324,7 +324,7 @@
             //if we have a valid drop target reference
             //(which implies that we have some selected items)
             if (selections.droptarget) {
-                if (e.target.getAttribute('draggable')) {
+                if (e.target.getAttribute('draggable')) { //TODO: this is draggable elem, not the target element. Need to get this target element
                     for (let len = selections.items.length, i = 0; i < len; i++) {
                         if (coursorCloserTo(e, related) === 'bottom') {
                             related.after(e.target);
